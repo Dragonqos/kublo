@@ -1,0 +1,17 @@
+##  Full configuration lives here: https://github.com/bitnami/charts/blob/main/bitnami/mongodb/values.yaml
+architecture: standalone
+useStatefulSet: true
+
+# Bitnami do not support Apple silicon ARM64 for MongoDB images
+# https://github.com/ZCube/bitnami-compat/pkgs/container/bitnami-compat%2Fmongodb - kindly prepared documentation but only have compiled MongoDB 6.0 version
+# https://github.com/xavidop/mongodb-7-bitnami/pkgs/container/mongodb Fortunately we still can use bitnami HELM chart with xavidop image instead
+# https://github.com/bitnami/charts/issues/3635
+image:
+  registry: ghcr.io
+  repository: xavidop/mongodb
+  tag: "7.0"
+
+auth:
+  enabled: true
+  rootUser: {{DEFAULT_USER}}
+  existingSecret: "secrets-pass"

@@ -1,0 +1,30 @@
+---
+apiVersion: skaffold/v4beta11
+kind: Config
+metadata:
+  name: {{NAMESPACE}}-elasticsearch
+
+build:
+  artifacts: []
+
+deploy:
+  kubeContext: minikube
+  helm:
+    releases:
+      - name: elasticsearch
+        remoteChart: bitnami/elasticsearch
+        namespace: {{NAMESPACE}}
+        valuesFiles:
+          - helm.values.yaml
+
+portForward:
+  - resourceType: service
+    resourceName: elasticsearch
+    namespace: {{NAMESPACE}}
+    port: 9200
+    localPort: 9200
+  - resourceType: service
+    resourceName: elasticsearch-kibana
+    namespace: {{NAMESPACE}}
+    port: 5601
+    localPort: 5601

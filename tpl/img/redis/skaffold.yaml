@@ -1,0 +1,30 @@
+---
+apiVersion: skaffold/v4beta11
+kind: Config
+metadata:
+  name: {{NAMESPACE}}-redis-sentinel
+
+build:
+  artifacts: []
+
+deploy:
+  kubeContext: minikube
+  helm:
+    releases:
+      - name: redis
+        remoteChart: bitnami/redis
+        namespace: {{NAMESPACE}}
+        valuesFiles:
+          - helm.values.yaml
+
+portForward:
+  - resourceType: service
+    resourceName: redis-master
+    namespace: {{NAMESPACE}}
+    port: 6379
+    localPort: 6379
+  - resourceType: service
+    resourceName: redis
+    namespace: {{NAMESPACE}}
+    port: 26379
+    localPort: 26379
