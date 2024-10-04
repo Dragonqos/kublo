@@ -40,7 +40,8 @@ select_dependencies() {
     log "6) Kafka"
     log "7) Cassandra"
     log "8) Cockroachdb"
-    log "9) All"
+    log "9) Postgresql"
+    log "10) All"
     read -p "Select (comma-separated list, e.g., 1,2,3): " selection
 
     deps=""
@@ -52,7 +53,8 @@ select_dependencies() {
     log "$selection" | grep -q 6 && deps="$deps kafka"
     log "$selection" | grep -q 7 && deps="$deps cassandra"
     log "$selection" | grep -q 8 && deps="$deps cockroachdb"
-    log "$selection" | grep -q 9 && deps="redis mongo mariadb elasticsearch rabbitmq kafka cassandra cockroachdb"
+    log "$selection" | grep -q 9 && deps="$deps postgresql"
+    log "$selection" | grep -q 10 && deps="redis mongo mariadb elasticsearch rabbitmq kafka cassandra cockroachdb postgresql"
 
     DEPENDENCIES=$deps
     configure
@@ -134,6 +136,9 @@ create_k8s_secrets() {
         --from-literal=rabbitmq-password="$DEFAULT_PASS" \
         --from-literal=kafka-password="$DEFAULT_PASS" \
         --from-literal=cassandra-password="$DEFAULT_PASS" \
+        --from-literal=postgres-admin-password="$DEFAULT_PASS" \
+        --from-literal=postgres-user-password="$DEFAULT_PASS" \
+        --from-literal=postgres-replication-password="$DEFAULT_PASS" \
         --dry-run=client -o yaml > "$DEST/k8s/secrets.pass.yaml"
 }
 
