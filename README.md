@@ -12,24 +12,17 @@ You can install `Kublo` using the Docker image or run it directly with a Makefil
 
 1. Install Go binary
    ```bash
-   go install github.com/Dragonqos/kublo@latest
+   go env -w GO111MODULE=on && go install github.com/Dragonqos/kublo@latest
    kublo
    ```
-2. If that fails, make sure your GOPATH/bin is in your PATH. You can add it with:
-   ```bash
-   export PATH=$PATH:$(go env GOPATH)/bin
-   ```
+
+### Option 2: Using Makefile
 
 1. Clone the repository:
     ```bash
-    git clone git@github.com:Dragonqos/kublo.git
-    cd kublo
+    git clone git@github.com:Dragonqos/kublo.git && cd kublo
+    make build
     ```
-2. Run the installation process [manually for MacOS](install_mac.md) or via script:
-    ```bash
-    make install
-    ```
-   
 ---
    
 ## Usage
@@ -37,7 +30,7 @@ You can install `Kublo` using the Docker image or run it directly with a Makefil
 After installation, you can use `Kublo` to create Kubernetes configuration files, deploy services, and set up local infrastructure for development
 
 ```bash
-make build
+kublo
 ```
 
 You will be prompted to enter the following information:
