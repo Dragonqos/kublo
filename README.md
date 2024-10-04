@@ -8,7 +8,17 @@
 
 You can install `Kublo` using the Docker image or run it directly with a Makefile.
 
-### Option 1: Using the Makefile
+### Option 1: Using Go binary
+
+1. Install Go binary
+   ```bash
+   go install github.com/Dragonqos/kublo@latest
+   kublo
+   ```
+2. If that fails, make sure your GOPATH/bin is in your PATH. You can add it with:
+   ```bash
+   export PATH=$PATH:$(go env GOPATH)/bin
+   ```
 
 1. Clone the repository:
     ```bash
