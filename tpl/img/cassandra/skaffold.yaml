@@ -1,0 +1,25 @@
+---
+apiVersion: skaffold/v4beta11
+kind: Config
+metadata:
+  name: {{NAMESPACE}}-cassandra
+
+build:
+  artifacts: []
+
+deploy:
+  kubeContext: minikube
+  helm:
+    releases:
+      - name: cassandra
+        remoteChart: bitnami/cassandra
+        namespace: {{NAMESPACE}}
+        valuesFiles:
+          - helm.values.yaml
+
+portForward:
+  - resourceType: service
+    resourceName: cassandra
+    namespace: {{NAMESPACE}}
+    port: 9042
+    localPort: 9042

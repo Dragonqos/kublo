@@ -15,13 +15,17 @@ install() {
 
 select_namespace() {
     read -p "Enter the k8s NAMESPACE to build: " namespace
-    NAMESPACE=$namespace
+    if [ "$namespace" != "" ]; then
+      NAMESPACE=$namespace
+    fi
     select_destination
 }
 
 select_destination() {
     read -p "Enter DESTINATION folder (also used as service prefix): " dest
-    DEST=$dest
+    if [ "$dest" != "" ]; then
+      DEST=$dest
+    fi
     select_dependencies
 }
 
@@ -34,7 +38,9 @@ select_dependencies() {
     log "4) Elasticsearch"
     log "5) RabbitMQ"
     log "6) Kafka"
-    log "7) All"
+    log "7) Cassandra"
+    log "8) Cockroachdb"
+    log "9) All"
     read -p "Select (comma-separated list, e.g., 1,2,3): " selection
 
     deps=""
@@ -44,7 +50,9 @@ select_dependencies() {
     log "$selection" | grep -q 4 && deps="$deps elasticsearch"
     log "$selection" | grep -q 5 && deps="$deps rabbitmq"
     log "$selection" | grep -q 6 && deps="$deps kafka"
-    log "$selection" | grep -q 7 && deps="redis mongo mariadb elasticsearch rabbitmq kafka"
+    log "$selection" | grep -q 7 && deps="$deps cassandra"
+    log "$selection" | grep -q 8 && deps="$deps cockroachdb"
+    log "$selection" | grep -q 9 && deps="redis mongo mariadb elasticsearch rabbitmq kafka cassandra cockroachdb"
 
     DEPENDENCIES=$deps
     configure
@@ -55,6 +63,8 @@ configure() {
     log "\033[1;32mConfiguring dependencies for namespace:\033[0m $NAMESPACE"
     log "\033[1;32mDestination folder:\033[0m $DEST"
     log "\033[1;32mDesired images:\033[0m $DEPENDENCIES\n\n"
+
+    install_helm_repo
 
     mkdir -p "$DEST/k8s" "$DEST/images"
 
@@ -80,6 +90,15 @@ configure() {
       -e "s/{{DEFAULT_USER}}/$DEFAULT_USER/g" \
       -e "s/{{DEST}}/$DEST/g" {} \;
     log "Configuration complete."
+}
+
+install_helm_repo() {
+  if brew list helm &>/dev/null; then
+    log "Adding helm repo..."
+    execute "helm repo add bitnami https://charts.bitnami.com/bitnami"
+    execute "helm repo add kafka-ui https://provectus.github.io/kafka-ui-charts"
+    execute "helm repo add cockroachdb https://charts.cockroachdb.com/"
+  fi
 }
 
 create_k8s_namespace() {
@@ -114,6 +133,7 @@ create_k8s_secrets() {
         --from-literal=elasticsearch-password="$DEFAULT_PASS" \
         --from-literal=rabbitmq-password="$DEFAULT_PASS" \
         --from-literal=kafka-password="$DEFAULT_PASS" \
+        --from-literal=cassandra-password="$DEFAULT_PASS" \
         --dry-run=client -o yaml > "$DEST/k8s/secrets.pass.yaml"
 }
 

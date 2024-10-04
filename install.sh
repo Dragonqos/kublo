@@ -99,7 +99,6 @@ if ! brew list go &>/dev/null; then
     export GOPATH=/opt/homebrew/opt/go
     export PATH=$PATH:$GOPATH/bin
     execute "go install go.uber.org/mock/mockgen@latest"
-    execute "go install go.uber.org/mock/mockgen@latest"
 else
     log "Go already installed."
 fi
