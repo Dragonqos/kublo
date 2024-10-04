@@ -1,15 +1,62 @@
 #!/bin/bash
 
-source ./utils.sh
-
 # Default variables
+TPL_DIR_PATH="./tpl"
 NAMESPACE="local"
 DEST="infra"
 DEFAULT_PASS="pass"
 DEFAULT_USER="root"
 
+# Logging function for better output
+log() {
+#    echo "$1" | tee -a "$LOGFILE"
+    echo "$1"
+}
+
+# Function to handle errors
+error_exit() {
+    echo "$1" 1>&2
+    exit 1
+}
+
+# Execute a command, log output and errors, and exit on error
+execute() {
+    echo "Executing: $1"
+    bash -c "$1"
+    if [ $? -ne 0 ]; then
+        error_exit "Command failed: $1 "
+    fi
+}
+
+logo() {
+    printf "\n\n"
+    log "\033[1;34m888    d8P  888     888 888888b.   888      .d88888b.  \033[0m"
+    log "\033[1;34m888   d8P   888     888 888   88b  888     d88P'  'Y88 \033[0m"
+    log "\033[1;34m888  d8P    888     888 888   88P  888     888     888 \033[0m"
+    log "\033[1;34m888d88K     888     888 8888888K.  888     888     888 \033[0m"
+    log "\033[1;34m8888888b    888     888 888   Y88b 888     888     888 \033[0m"
+    log "\033[1;34m888  Y88b   888     888 888    888 888     888     888 \033[0m"
+    log "\033[1;34m888   Y88b  Y88b. .d88P 888   d88P 888     Y88b. .d88P \033[0m"
+    log "\033[1;34m888    Y88b  'Y88888P'  8888888P'  88888888  Y88888P'  \033[0m"
+    log "\n\n\033[1;32mKUBLO going to help you build simple Kubernetes (k8s + minikube) infrastructure for local development\033[0m"
+    log "\033[1;32mwith some ready-to-go database and broker Docker images\033[0m\n\n"
+}
+
 install() {
     logo
+
+    ## First check OS.
+    OS="$(uname)"
+    if [[ "${OS}" == "Linux" ]]
+    then
+      log "Running KUBLO on Linux..."
+    elif [[ "${OS}" == "Darwin" ]]
+    then
+      log "Running KUBLO on macOS..."
+    else
+      abort "KUBLO is only supported on macOS and Linux."
+    fi
+
     select_namespace
 }
 
@@ -81,7 +128,7 @@ configure() {
         log "No dependencies selected. Skipping configuration..."
     else
         for dep in $DEPENDENCIES; do
-            cp -r tpl/img/$dep "$DEST/images"
+            cp -r "$TPL_DIR_PATH/img/$dep" "$DEST/images"
             echo "  - path: images/$dep/skaffold.yaml" >> "$DEST/skaffold.yaml"
             log "\033[1;32m - configured $dep\033[0m"
         done
@@ -143,8 +190,8 @@ create_k8s_secrets() {
 }
 
 create_skaffold_manifest() {
-    cp tpl/k8s_manifest.tpl.yaml "$DEST/k8s/skaffold.yaml"
-    cp tpl/skaffold_manifest.tpl.yaml "$DEST/skaffold.yaml"
+    cp "$TPL_DIR_PATH/skaffold/k8s_manifest.tpl.yaml" "$DEST/k8s/skaffold.yaml"
+    cp "$TPL_DIR_PATH/skaffold/skaffold_manifest.tpl.yaml" "$DEST/skaffold.yaml"
     log "\033[1;32m - skaffold manifest created\033[0m"
 }
 
