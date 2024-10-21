@@ -8,13 +8,15 @@
 
 You can install `Kublo` using the Docker image or run it directly with a Makefile.
 
-### Option 1: Using shell
+### Option 1: Using shell script
 
    ```bash
    /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/Dragonqos/kublo/HEAD/build.sh)"
    ```
 
-### Option 2: Using Go binary
+
+
+#### Option 2: Using Go binary
 
 1. Install Go binary
    ```bash
@@ -26,7 +28,7 @@ You can install `Kublo` using the Docker image or run it directly with a Makefil
    export PATH=$PATH:$(go env GOPATH)/bin
    ```
 
-### Option 2: Using Makefile
+#### Option 3: Using Makefile
 
 1. Clone the repository:
     ```bash
@@ -46,8 +48,8 @@ kublo
 ```
 
 ```bash
-888    d8P  888     888 888888b.   888      .d88888b.
-888   d8P   888     888 888   88b  888     d88P'  'Y88
+888    d8P  888     888 888888b.   888      .d88888b.   ███████
+888   d8P   888     888 888   88b  888     d88P'  'Y88  ███████
 888  d8P    888     888 888   88P  888     888     888
 888d88K     888     888 8888888K.  888     888     888
 8888888b    888     888 888   Y88b 888     888     888
