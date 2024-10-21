@@ -1,5 +1,0 @@
-##  Full configuration lives here: https://github.com/bitnami/charts/blob/main/bitnami/cassandra/values.yaml
-
-dbUser:
-  user: {{DEFAULT_USER}}
-  existingSecret: "secrets-pass"

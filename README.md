@@ -8,7 +8,13 @@
 
 You can install `Kublo` using the Docker image or run it directly with a Makefile.
 
-### Option 1: Using Go binary
+### Option 1: Using shell
+
+   ```bash
+   /bin/bash -c "$(curl -fsSL https://github.com/Dragonqos/kublo/HEAD/build.sh)"
+   ```
+
+### Option 2: Using Go binary
 
 1. Install Go binary
    ```bash
@@ -60,11 +66,16 @@ Enter the k8s NAMESPACE to build:
 
 You will be prompted to enter the following information:
 
-- Namespace: The Kubernetes namespace for the environment.
-- Destination Folder: The folder where the generated configuration files will be placed.
+- Namespace: The Kubernetes namespace for the environment. Default namespace `local`
+- Destination Folder: The folder where the generated configuration files will be placed. Default namespace `infra`
+- Password: The default user is `root`  and default password is `pass`.
 - Dependencies: Choose the dependencies you want to include (e.g., Kafka, Rabbit, Redis, Mongo, Elasticsearch, MariaDB etc...).
 
 Once you complete these steps, `Kublo` will generate Kubernetes YAML manifests and a `skaffold.yaml` file based on your selection.
+Then you only need to run Skaffold. Skaffold will run k8s and selected dependencies. 
+   ```bash
+   cd infra && skaffold dev
+   ```
 
 ## Contributing
 
