@@ -11,7 +11,7 @@ You can install `Kublo` using the Docker image or run it directly with a Makefil
 ### Option 1: Using shell
 
    ```bash
-   /bin/bash -c "$(curl -fsSL https://github.com/Dragonqos/kublo/HEAD/build.sh)"
+   /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/Dragonqos/kublo/HEAD/build.sh)"
    ```
 
 ### Option 2: Using Go binary
